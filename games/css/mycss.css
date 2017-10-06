@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+}
+
+
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+}
+
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align:center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color:#000;
+    color: ddd;
+}
+
+.topnav .icon {
+    display: none;
+}
+
+/*when the screen is less than 600px wide */
+
+@media screen and (max-width: 600px){
+    /*hides all apart from the first a */
+    .topnav a:not(:first-child){
+        display: none;
+    }
+    
+    /*displays the icon on the right hand side */
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
+    
+    .topnav.responsive {position: relative;}
+    
+    .topnav.reponsive a.icon{
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    
+    .topnav.responsive a{
+        float: none;
+        display: block;
+        text-align: left;
+    }
+}

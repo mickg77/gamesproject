@@ -1,6 +1,5 @@
  <?php
 
- 
  function display_stock(){
             global $conn;
             $stmt =$conn->prepare("SELECT * FROM games");
