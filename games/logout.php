@@ -1,10 +1,11 @@
 <?php
+
     session_start();
     session_destroy();
-    require('header.php');
-
+    require('header.php');    
 ?>
 
-<a href="index.php">Back to home</a>
+<p>You have logged out.</p>
+<a href="index.php">Back to main page</a>
 
 <?php require('footer.php'); ?>

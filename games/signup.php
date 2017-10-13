@@ -22,7 +22,11 @@
             $DOB=$_POST["datebox"];
             
             if($password1==$password2){
-            
+                
+                $salt="gpckkkbjdbgg3779421046511";
+                $password1=sha1($password1.$salt);
+                
+                
                 $stmt=$conn->prepare("INSERT INTO users
                                     (username, password,email, dob, role)
                                     VALUES
@@ -59,14 +63,35 @@
     require('header.php');
     
 ?>
-    <form name="signup" method="POST" action="">
-        <label>Username</label><input type="text" name="usernamebox">
-        <label>Password</label><input type="text" name="password1box">
-        <label>Re Enter Password</label><input type="text" name="password2box">
-        <label>DOB</label><input type="date" name="datebox">
-        <label>Email</label><input type="text" name="emailbox">
-        <input type="submit" name="signup">
-        
+    <form name="signup" method="POST" action="" id="myform">
+        <table>
+            <tr>
+                <td>Username</td>
+                <td><input type="text" name="usernamebox"></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="text" name="password1box" id="pwd1"></td>
+            </tr>
+            <tr>
+                <td>Re Enter Password</td>
+                <td><input type="text" name="password2box" id="pwd2"></td>
+            </tr>
+            <tr>
+                <td>DOB</td>
+                <td><input type="date" name="datebox"></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="text" name="emailbox"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" name="signup"></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+        <p id="length"></p>
+        <p id="match"></p>
     </form>
     
 <?php    

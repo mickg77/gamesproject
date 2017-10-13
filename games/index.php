@@ -1,72 +1,92 @@
-<?php require('connect.php'); ?>
-<?php require('header.php'); ?>
-<?php require('functions.php'); ?>
 
-<?php
+<?php 
+    require('connect.php');
+    require('functions.php');
     session_start();
     
-    if(isset($_POST['submit'])){
+    //if submit is clicked
+    loginCheck();
+    
+    require('header.php');
+?>
+
+    <h1>Welcome to our shop</h1>
+    
+   
+
+<?php 
+
+    if($_SESSION['admin']){
+       
+        deleteRecord();
+       
+        echo "<a href='logout.php'>Logout</a>";
         
-        //get variables out of the form
-        $username = $_POST['namebox'];
-        $password = $_POST['passwordbox'];
-        
-        $stmt=$conn->prepare("SELECT * FROM users WHERE username=:username 
-        AND password=:password");
-        $stmt->bindParam(':username',$username);
-        $stmt->bindParam(':password',$password);
+        $stmt=$conn->prepare("SELECT * FROM games");
         $stmt->execute();
         
         if($stmt->rowCount()>0){
-            echo 'login successful';
-            $_SESSION['admin']=true;
-        }
-        else {
-            echo 'login failed';
-        }
         
-    }
-    ?>
-
-<!--content of the body starts here-->
-
-        <h1>My Games Shop</h1>
-        
-        <?php
-        
-        if($_SESSION['admin']){
-            
-            if(isset($_GET['gameid'])){
-                
-                $id=$_GET['gameid'];
-                $stmt=$conn->prepare("DELETE FROM games WHERE gameid=:gameid");
-                $stmt->bindParam(':gameid',$id);
-                $stmt->execute();
-            
+            while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
+                //output the row
+                echo    "<p>ID : ".$row['gameid'].
+                        "Title :".$row['title'].
+                        "Rating :".$row['rating'].
+                        "Genre : ".$row['genre'].
+                        "Price : ".$row['price'].
+                        
+                        "<a href='index.php?gameid=".$row['gameid']."'>Delete</a>
+                        <a href='update.php?gameid=".$row['gameid']."'> | Update</a>
+                        </p>";
             }
+        
+        
+        
+        
             
-            display_stock();
-            
-            
-            echo '<a href="add.php">Add a record |</a>';
-            echo '<a href="logout.php"> Logout |</a>';
         }
         
-        else{
-            
-            echo '            
-            <form action="" name="login" method="POST">
-            <label>Name</label><input type="text" name="namebox"><br/>
-            <label>Password</label><input type="password" name="passwordbox"><br/>
-            <input type="submit" name="submit">
-            
-        </form>';
+        else {
+            echo "<p> No records found</p>";
         }
+        
+        //form for inserting records
+        
+        echo '<a href="add.php">Add a record</a>';
+        
+        
+        
+        
+        
+    }//end of session check
+     
+     
+    //display the form    
+    else {
+        echo '
+         <form name="login" action="" method="POST">
+        <label>Name</label>
+        <input type="text" name="namebox" length="30">
+        <br/>
+        
+        <label>Password</label>
+        <input type="password" name="passwordbox" length="30">
+        <br/>
+        
+        <input type="submit" name="submit">
+        
+        
+    </form>
+        ';
        
-        ?>
-        
-        
-        
-        
-<!--content of the body ends here-->
-<?php require('footer.php'); ?>
+    }
+
+    
+    require('footer.php');
+?>
+    
+    
+    
+
+
+

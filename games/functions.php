@@ -1,37 +1,54 @@
- <?php
+<?php
 
- function display_stock(){
-            global $conn;
-            $stmt =$conn->prepare("SELECT * FROM games");
+
+
+function loginCheck(){
+         global $conn;
+       
+        
+        if(isset($_POST['submit'])){
+            //check if login is achieved 
+            //get variables from form 
+            $username=$_POST['namebox'];
+            $salt="gpckkkbjdbgg3779421046511";
+            $password=sha1($_POST['passwordbox'].$salt);
+            
+            
+            
+            $stmt= $conn->prepare("SELECT * FROM users WHERE 
+            username =:username AND password=:password");
+            $stmt->bindParam(':username',$username);
+            $stmt->bindParam(':password',$password);
             $stmt->execute();
             
             if($stmt->rowCount()>0){
-                //we have found at least 1 record
-                echo "<table border='1'>
-                <th>ID</th>
-                <th>Game Title</th>
-                <th>Rating</th>
-                <th>Genre</th>
-                <th>Price</th>";
-               
-                while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
-                    //repeats output for all games
-                    echo "<tr>
-                    <td>".$row['gameid']."</td>
-                    <td>".$row['title']."</td>
-                    <td>".$row['rating']."</td>
-                    <td>".$row['genre']."</td>
-                    <td>".$row['price']."</td>
-                    <td><a href='index.php?gameid=".$row['gameid']."'>Delete</a></td>
-                    <td><a href='update.php?gameid=".$row['gameid']."'>Update</a></td>
-                    </tr>";
-                    
-                }
-                echo "</table>";
+                echo "<p>Login successful</p>";
+                $_SESSION['admin']=true;
+                
             }
+            
             else {
-                echo "<p>No records found</p>";
+                echo "<p>no record exists";
             }
-        }//end of display_stock function
         
-    ?>
+        }
+}
+
+function deleteRecord(){
+    
+         global $conn;
+    
+          if(isset($_GET['gameid'])){
+            
+            $id_for_deletion = $_GET['gameid'];
+            
+            $stmt=$conn->prepare('DELETE FROM games WHERE gameid=:gameid');
+            $stmt->bindParam(':gameid',$id_for_deletion);
+            $stmt->execute();
+        
+            
+        }
+}
+
+
+?>
